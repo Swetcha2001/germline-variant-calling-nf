@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Nextflow test profile (GIAB HG001 chr20 subset)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-file: environment.yml
+          create-args: nextflow=24.10.6
+          cache-environment: true
+
+      - name: Download chr20 reference, annotation, ClinVar, GIAB truth
+        run: bash scripts/download_reference.sh
+
+      - name: Run pipeline (test profile)
+        run: |
+          export PATH=$PWD/bin:$PATH
+          nextflow run main.nf -profile test --outdir results_test -ansi-log false
+
+      - name: Check benchmark F1 >= 0.95
+        run: |
+          cat results_test/benchmark/NA12878.benchmark.tsv
+          awk -F'\t' 'NR>2 && $7 < 0.95 {print "F1 too low for "$1": "$7; bad=1} END {exit bad}' \
+            results_test/benchmark/NA12878.benchmark.tsv
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: |
+            results_test/benchmark
+            results_test/reports
+            results_test/multiqc/multiqc_report.html

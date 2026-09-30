@@ -1,0 +1,2 @@
+sample,fastq_1,fastq_2
+NA12878,test_data/reads/NA12878_20_10000000_10200000_R1.fastq.gz,test_data/reads/NA12878_20_10000000_10200000_R2.fastq.gz

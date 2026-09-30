@@ -1,0 +1,10 @@
+work/
+.nextflow*
+results*/
+ref/
+.ref_cache/
+benchmark_data/
+bench.log
+*.pyc
+__pycache__/
+*.bam.bai
