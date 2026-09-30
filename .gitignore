@@ -1,6 +1,6 @@
 work/
 .nextflow*
-results*/
+/results*/
 ref/
 .ref_cache/
 benchmark_data/

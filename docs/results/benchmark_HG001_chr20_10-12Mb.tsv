@@ -1,0 +1,4 @@
+# high-confidence bases evaluated: 1955248
+type	TP	FP	FN	precision	recall	F1
+SNV	2622	3	18	0.9989	0.9932	0.9960
+INDEL	426	0	5	1.0000	0.9884	0.9942
